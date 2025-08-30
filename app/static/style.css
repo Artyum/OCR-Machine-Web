@@ -1,0 +1,129 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+a,
+a:visited,
+a:hover,
+a:active,
+a:focus {
+    text-decoration: none !important;
+}
+
+.page_column {
+    margin: 0 auto;
+    max-width: 1000px;
+    width: 100%;
+}
+
+.status_table {
+    width: 100%;
+}
+
+.main_title {
+    width: 100%;
+    font-size: 2.5rem;
+    font-weight: 700;
+    background-clip: text;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: 2px solid transparent;
+    background: linear-gradient(45deg, #8061d9, #48c5ec) border-box;
+    box-shadow: 0 4px 15px rgba(128, 97, 217, 0.2);
+}
+
+.separator {
+    display: flex;
+    width: 100%;
+    font-size: 22px;
+    color: #405a94;
+    align-items: center;
+    text-align: center;
+    margin: 10px 0;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.separator::before,
+.separator::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid #7b8496;
+}
+
+.separator::before {
+    margin-right: 0.75em;
+}
+
+.separator::after {
+    margin-left: 0.75em;
+}
+
+.menu_row {
+    width: 100%;
+    gap: 3;
+    /*border-bottom: 1px solid rgb(200, 200, 200);*/
+    padding: 7px 0;
+    margin-top: 2px;
+}
+
+.menu_link {
+    gap: 10px;
+    padding: 4px 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu_link:hover {
+    padding: 4px 15px;
+    color: #f4f6f7;
+    background-color: #2c5ca3;
+    border-radius: 7px;
+    font-size: 14px;
+}
+
+.input_field {
+    width: 200px;
+}
+
+.upload_flield {
+    width: 100%;
+    border: 1px dashed #666;
+    border-radius: 7px;
+    padding: 5px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 0 !important;
+}
+
+.label-header {
+    width: 100%;
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin: 0;
+    padding: 0.3em 1em;
+    border-radius: 5px;
+    border: 1px dashed #cecece;
+    /*text-transform: uppercase;*/
+}
+
+.upload_label {
+    background-color: #b4d0f0;
+    color: #16466d;
+}
+
+.table_processing_label {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.table_finished_label {
+    background-color: #d4edda;
+    color: #155724;
+}

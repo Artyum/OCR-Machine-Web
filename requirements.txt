@@ -1,0 +1,4 @@
+nicegui
+img2pdf
+PyPDF2
+watchdog

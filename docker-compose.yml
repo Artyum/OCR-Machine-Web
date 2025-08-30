@@ -1,0 +1,10 @@
+services:
+  ocr-machine-web:
+    image: ocr-machine-web:latest
+    container_name: ocr-machine-web
+    restart: unless-stopped
+    user: appuser
+    ports:
+      - "3333:8080"
+    volumes:
+      - ./data:/data

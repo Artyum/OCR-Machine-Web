@@ -1,0 +1,6 @@
+*.sh
+*.pdf
+venv
+__pycache__
+.vscode
+/data/
