@@ -5,7 +5,7 @@ from pathlib import Path
 from config import Config
 from nicegui import ui
 from PyPDF2 import PdfMerger
-from services import convert_image, get_file_list, move_files
+from services import get_file_list, image_to_pdf, move_files
 
 from .page_header import page_header
 
@@ -28,7 +28,7 @@ def page_merge():
         ui.notify(msg, type="positive")
         logging.info(msg)
 
-        convert_image(save_path)
+        image_to_pdf(save_path)
 
         # Refresh processing list
         refresh_processing_table()

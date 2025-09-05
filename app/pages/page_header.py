@@ -13,10 +13,9 @@ def page_header(title):
         with ui.row().classes("menu_row"):
             ui.link("🔍 OCR", "/").classes("menu_link")
             ui.link("➕ Merge", "/merge").classes("menu_link")
+            ui.link("🖼️ PDF to Image", "/convert").classes("menu_link")
             ui.space()
             ui.link("⚙️ Settings", "/settings").classes("menu_link")
-
-        # ui.label(title).classes("page-title")
 
         with ui.row().classes('separator'):
             ui.label(title)

@@ -3,8 +3,8 @@ import os
 
 from config import Config
 from nicegui import ui
-from services import (clear_all_data, convert_image, download_zip,
-                      get_file_list, processor)
+from services import (clear_all_data, download_zip, get_file_list,
+                      image_to_pdf, processor)
 
 from .page_header import page_header
 
@@ -40,7 +40,7 @@ def page_index():
         ui.notify(msg, type="positive")
         logging.info(msg)
 
-        convert_image(save_path)
+        image_to_pdf(save_path)
 
     # Register callback
     processor.subscribe(lambda: (

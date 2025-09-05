@@ -8,7 +8,7 @@ from config import Config
 from fastapi import HTTPException
 from fastapi.responses import FileResponse
 from nicegui import app, ui
-from pages import page_index, page_merge, page_settings
+from pages import page_convert, page_index, page_merge, page_settings
 from services import DirectoryWatcher, processor
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -39,6 +39,11 @@ def index():
 @ui.page("/merge")
 def combine():
     page_merge()
+
+
+@ui.page("/convert")
+def convert():
+    page_convert()
 
 
 @ui.page("/settings")

@@ -13,12 +13,13 @@ class Config:
     INPUT_DIR = os.path.join(DATA_DIR, "input")
     OUTPUT_DIR = os.path.join(DATA_DIR, "output")
     MERGE_DIR = os.path.join(DATA_DIR, "merge")
+    CONVERT_DIR = os.path.join(DATA_DIR, "convert")
     CONFIG_FILE = "config.txt"
 
     SUPPORTED_IMAGE_EXTENSIONS = ('.jpg', '.jpeg', '.png', '.tif', '.tiff', '.bmp', '.ppm', '.pgm', '.pbm')
 
     # Ensure required directories exist
-    for d in [INPUT_DIR, OUTPUT_DIR, MERGE_DIR]:
+    for d in [INPUT_DIR, OUTPUT_DIR, MERGE_DIR, CONVERT_DIR]:
         os.makedirs(d, exist_ok=True)
 
     # Map between config keys in file and class attributes

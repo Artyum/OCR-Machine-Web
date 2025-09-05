@@ -4,11 +4,13 @@ import os
 import shutil
 import subprocess
 import zipfile
+from datetime import datetime
 from pathlib import Path
 
 import img2pdf
 from config import Config
 from nicegui import ui
+from pdf2image import convert_from_path
 
 
 def get_langs():
@@ -41,7 +43,7 @@ def get_file_list(dir):
     return files
 
 
-def convert_image(file_path: str):
+def image_to_pdf(file_path: str):
     """Convert single image file to PDF in the same directory"""
 
     if not file_path.lower().endswith(Config.SUPPORTED_IMAGE_EXTENSIONS):
@@ -63,6 +65,40 @@ def convert_image(file_path: str):
         ui.notify(f"Error converting {os.path.basename(file_path)}", type="negative")
 
 
+def pdf_to_jpg(pdf_path, dpi=200, output_dir=Config.MERGE_DIR):
+    """
+    Converts a PDF file to JPG images.
+    Each page is saved as a separate JPG file.
+
+    :param pdf_path: path to the PDF file
+    :param dpi: resolution in DPI (default is 200)
+    :param output_dir: output folder (if None, uses the PDF's directory)
+    """
+    if output_dir is None:
+        output_dir = os.path.dirname(pdf_path)
+
+    # extract the base filename without extension
+    base_name = os.path.splitext(os.path.basename(pdf_path))[0]
+
+    # convert PDF pages to images
+    pages = convert_from_path(pdf_path, dpi=dpi)
+    num_pages = len(pages)
+    width = len(str(num_pages)) if num_pages >= 10 else 0
+
+    output_files = []
+    for i, page in enumerate(pages, start=1):
+        if width > 0:
+            page_num = str(i).zfill(width)
+        else:
+            page_num = str(i)
+
+        output_file = os.path.join(output_dir, f"{base_name}_{page_num}.jpg")
+        page.save(output_file, "JPEG")
+        output_files.append(output_file)
+
+    return output_files
+
+
 def format_size(size_in_bytes: int) -> str:
     """Convert bytes into human-readable B, KB or MB format"""
     if size_in_bytes < 1024:
@@ -75,7 +111,7 @@ def format_size(size_in_bytes: int) -> str:
 
 def clear_all_data():
     """Clear all files from input and output directories"""
-    dirs = [Config.INPUT_DIR, Config.OUTPUT_DIR, Config.MERGE_DIR]
+    dirs = [Config.INPUT_DIR, Config.OUTPUT_DIR, Config.MERGE_DIR, Config.CONVERT_DIR]
     for directory in dirs:
         for filename in os.listdir(directory):
             file_path = os.path.join(directory, filename)
@@ -106,9 +142,12 @@ async def download_zip(dir):
             if file_path.is_file():
                 zip_file.write(file_path, file_path.name)
 
+    # Generate timestamp
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H%M")
+
     zip_buffer.seek(0)
     # Trigger download
-    ui.download(zip_buffer.getvalue(), 'all_files.zip', 'application/zip')
+    ui.download(zip_buffer.getvalue(), f'ocr_machine_files_{timestamp}.zip', 'application/zip')
     ui.notify("Downloading all files as ZIP archive", type="info")
 
 
