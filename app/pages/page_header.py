@@ -18,4 +18,4 @@ def page_header(title):
             ui.link("⚙️ Settings", "/settings").classes("menu_link")
 
         with ui.row().classes('separator'):
-            ui.label(title)
+            ui.label(title).classes("title")

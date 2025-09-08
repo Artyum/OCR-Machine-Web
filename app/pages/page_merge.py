@@ -138,6 +138,6 @@ def page_merge():
             ui.space()
             ui.button("Send all to OCR", icon="forward", color="primary", on_click=move_to_ocr)
             ui.space()
-            ui.button("Download", icon="download", color="primary", on_click=download)
+            ui.button("Download All", icon="download", color="primary", on_click=download)
 
     refresh_processing_table()

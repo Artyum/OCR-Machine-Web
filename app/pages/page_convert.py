@@ -10,7 +10,7 @@ from .page_header import page_header
 
 
 def page_convert():
-    async def upload(file):
+    def upload(file):
         if not file:
             ui.notify("Failed to upload file", type="negative")
             return
@@ -83,6 +83,6 @@ def page_convert():
 
         with ui.row().classes("w-full"):
             ui.space()
-            ui.button("Download", icon="download", color="primary", on_click=lambda: download_zip(dir=Config.CONVERT_DIR))
+            ui.button("Download All", icon="download", color="primary", on_click=lambda: download_zip(dir=Config.CONVERT_DIR))
 
     refresh_processing_table()

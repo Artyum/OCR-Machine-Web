@@ -8,9 +8,34 @@ from datetime import datetime
 from pathlib import Path
 
 import img2pdf
+import nicegui.client
 from config import Config
 from nicegui import ui
 from pdf2image import convert_from_path
+
+
+def apply_nicegui_patch():
+    """
+    Apply patch to NiceGUI Client.delete method to handle KeyError gracefully.
+    This prevents 'KeyError' exceptions when deleting already removed client instances.
+    """
+    # Store the original delete method
+    original_delete = nicegui.client.Client.delete
+
+    def patched_delete(self):
+        """
+        Patched version of Client.delete that handles KeyError exceptions.
+        """
+        try:
+            # Call the original delete method
+            original_delete(self)
+        except KeyError:
+            # Silently ignore KeyError when client instance is already removed
+            pass
+
+    # Replace the original method with the patched version
+    nicegui.client.Client.delete = patched_delete
+    logging.info("NiceGUI KeyError patch applied successfully")
 
 
 def get_langs():
@@ -77,26 +102,22 @@ def pdf_to_jpg(pdf_path, dpi=200, output_dir=Config.MERGE_DIR):
     if output_dir is None:
         output_dir = os.path.dirname(pdf_path)
 
-    # extract the base filename without extension
+    # Extract the base filename without extension
     base_name = os.path.splitext(os.path.basename(pdf_path))[0]
 
-    # convert PDF pages to images
+    # Convert PDF pages to images
     pages = convert_from_path(pdf_path, dpi=dpi)
     num_pages = len(pages)
-    width = len(str(num_pages)) if num_pages >= 10 else 0
 
-    output_files = []
+    # Determine padding width for page numbers
+    padding_width = len(str(num_pages)) if num_pages > 1 else 0
+
     for i, page in enumerate(pages, start=1):
-        if width > 0:
-            page_num = str(i).zfill(width)
-        else:
-            page_num = str(i)
+        # Format page number with appropriate padding
+        page_suffix = f"_{i:0{padding_width}d}" if num_pages > 1 else ""
 
-        output_file = os.path.join(output_dir, f"{base_name}_{page_num}.jpg")
+        output_file = os.path.join(output_dir, f"{base_name}{page_suffix}.jpg")
         page.save(output_file, "JPEG")
-        output_files.append(output_file)
-
-    return output_files
 
 
 def format_size(size_in_bytes: int) -> str:

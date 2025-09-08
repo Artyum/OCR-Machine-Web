@@ -9,7 +9,7 @@ from fastapi import HTTPException
 from fastapi.responses import FileResponse
 from nicegui import app, ui
 from pages import page_convert, page_index, page_merge, page_settings
-from services import DirectoryWatcher, processor
+from services import DirectoryWatcher, apply_nicegui_patch, processor
 from starlette.middleware.sessions import SessionMiddleware
 
 # Logging configuration: INFO+ level to stdout
@@ -19,7 +19,8 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 )
 logging.info("OCR Machine Start")
-logging.getLogger("nicegui").setLevel(logging.WARNING)
+
+apply_nicegui_patch()
 
 # Static files
 app.add_static_files('/static', 'static', max_cache_age=3600)
@@ -95,5 +96,6 @@ ui.run(
     reload=False,
     binding_refresh_interval=1,
     reconnect_timeout=600,
+    # uvicorn_logging_level="debug",
     dark=False
 )

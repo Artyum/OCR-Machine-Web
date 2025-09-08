@@ -49,6 +49,13 @@ a:focus {
     font-weight: bold;
 }
 
+.separator .title {
+    background-color: #3e70bb;
+    border-radius: 15px;
+    color: #e8eaee;
+    padding: 5px 40px;
+}
+
 .separator::before,
 .separator::after {
     content: "";

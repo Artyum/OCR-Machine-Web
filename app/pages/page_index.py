@@ -85,7 +85,7 @@ def page_index():
         ''')
 
         with ui.row().classes('w-full'):
-            ui.button("Clear", icon="delete", color="red", on_click=clear_files)
+            ui.button("Clear All", icon="delete", color="red", on_click=clear_files)
             ui.space()
             ui.button("Download All", icon="file_download", color="primary", on_click=lambda: download_zip(dir=Config.OUTPUT_DIR))
 
