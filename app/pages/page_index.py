@@ -3,8 +3,7 @@ import os
 
 from config import Config
 from nicegui import ui
-from services import (clear_all_data, download_zip, get_file_list,
-                      image_to_pdf, processor)
+from services import clear_all_data, download_zip, get_file_list, image_to_pdf, processor, save_upload
 
 from .page_header import page_header
 
@@ -26,21 +25,10 @@ def page_index():
         output_table.rows = get_file_list(dir=Config.OUTPUT_DIR)
         output_table.update()
 
-    def upload(file):
-        if not file:
-            ui.notify("Failed to upload file", type="negative")
-            return
-
-        # Save uploaded file
-        save_path = os.path.join(Config.INPUT_DIR, file.name)
-        with open(save_path, "wb") as f:
-            f.write(file.content.read())  # here file.content is a BytesIO stream
-
-        msg = f"File saved: {file.name}"
-        ui.notify(msg, type="positive")
-        logging.info(msg)
-
-        image_to_pdf(save_path)
+    def upload(e):
+        save_path = save_upload(e, Config.INPUT_DIR)
+        if save_path:
+            image_to_pdf(save_path)
 
     # Register callback
     processor.subscribe(lambda: (

@@ -14,6 +14,25 @@ from nicegui import ui
 from pdf2image import convert_from_path
 
 
+def save_upload(e, path):
+    if not e or not e.file.name:
+        ui.notify("No file selected", type="negative")
+        return None
+
+    # Generate safe file path
+    filename = os.path.basename(e.file.name)
+    save_path = os.path.join(path, filename)
+
+    with open(save_path, "wb") as f:
+        f.write(e.file._data)
+
+    file_size = format_size(os.path.getsize(save_path))
+    msg = f"File saved: {filename} ({file_size})"
+    ui.notify(msg, type="positive")
+    logging.info(msg)
+    return save_path
+
+
 def apply_nicegui_patch():
     """
     Apply patch to NiceGUI Client.delete method to handle KeyError gracefully.
@@ -79,7 +98,8 @@ def image_to_pdf(file_path: str):
 
     try:
         with open(pdf_path, "wb") as f:
-            f.write(img2pdf.convert(file_path))
+            # f.write(img2pdf.convert(file_path))  # type: ignore
+            f.write(img2pdf.convert(file_path, rotation=img2pdf.Rotation.ifvalid))  # type: ignore
 
         os.remove(file_path)
         logging.info(f"Converted and removed original: {file_path}")

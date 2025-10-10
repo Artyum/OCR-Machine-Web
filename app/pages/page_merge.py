@@ -1,11 +1,12 @@
 import logging
 import os
+import shutil
 from pathlib import Path
 
 from config import Config
 from nicegui import ui
 from PyPDF2 import PdfMerger
-from services import get_file_list, image_to_pdf, move_files
+from services import get_file_list, image_to_pdf, move_files, save_upload
 
 from .page_header import page_header
 
@@ -13,25 +14,13 @@ from .page_header import page_header
 def page_merge():
     output_filename = "Combined_document.pdf"
 
-    def upload(file):
-        if not file:
-            ui.notify("Failed to upload file", type="negative")
-            return
+    def upload(e):
+        save_path = save_upload(e, Config.MERGE_DIR)
+        if save_path:
+            image_to_pdf(save_path)
 
-        # Save uploaded file
-        save_path = os.path.join(Config.MERGE_DIR, file.name)
-        with open(save_path, "wb") as f:
-            f.write(file.content.read())  # here file.content is a BytesIO stream
-
-        size = os.path.getsize(filename=save_path)
-        msg = f"File saved: {file.name} ({size / 1024 / 1024:.2f} MB)"
-        ui.notify(msg, type="positive")
-        logging.info(msg)
-
-        image_to_pdf(save_path)
-
-        # Refresh processing list
-        refresh_processing_table()
+            # Refresh processing list
+            refresh_processing_table()
 
     def refresh_processing_table():
         # Get files

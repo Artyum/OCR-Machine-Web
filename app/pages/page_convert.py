@@ -1,35 +1,24 @@
 import logging
 import os
+import shutil
 from pathlib import Path
 
 from config import Config
 from nicegui import ui
-from services import download_zip, get_file_list, pdf_to_jpg
+from services import download_zip, get_file_list, pdf_to_jpg, save_upload
 
 from .page_header import page_header
 
 
 def page_convert():
-    def upload(file):
-        if not file:
-            ui.notify("Failed to upload file", type="negative")
-            return
+    def upload(e):
+        save_path = save_upload(e, Config.CONVERT_DIR)
+        if save_path:
+            # Start conversion
+            convert()
 
-        # Save uploaded file
-        save_path = os.path.join(Config.CONVERT_DIR, file.name)
-        with open(save_path, "wb") as f:
-            f.write(file.content.read())  # here file.content is a BytesIO stream
-
-        size = os.path.getsize(filename=save_path)
-        msg = f"File saved: {file.name} ({size / 1024 / 1024:.2f} MB)"
-        ui.notify(msg, type="positive")
-        logging.info(msg)
-
-        # Start conversion
-        convert()
-
-        # Refresh processing list
-        refresh_processing_table()
+            # Refresh processing list
+            refresh_processing_table()
 
     def convert():
         """
