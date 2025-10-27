@@ -46,8 +46,21 @@ class Processor:
         if not os.path.exists(path) or not path.lower().endswith('.pdf'):
             return
 
-        size = os.path.getsize(path)
         filename = os.path.basename(path)
+        c = 0
+        while True:
+            size = os.path.getsize(path)
+            if size > 0:
+                break
+            time.sleep(0.1)
+            c -= 1
+            if c <= 0:
+                logging.error(msg=f"Nie uało się załadować pliku {filename}")
+                return
+
+        # logging.info(f"PATH={path}")
+        # logging.info(f"SIZE={size}")
+        # logging.info(f"NAME={filename}")
 
         with self.lock:
             self.files.append({

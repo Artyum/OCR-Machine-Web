@@ -16,7 +16,6 @@ def page_index():
         refresh_output_table()
 
     def refresh_processing_table():
-        # Refresh processing table rows
         processing_table.rows = processor.get_file_list()
         processing_table.update()
 

@@ -18,8 +18,6 @@ def page_merge():
         save_path = save_upload(e, Config.MERGE_DIR)
         if save_path:
             image_to_pdf(save_path)
-
-            # Refresh processing list
             refresh_processing_table()
 
     def refresh_processing_table():

@@ -23,8 +23,12 @@ def save_upload(e, path):
     filename = os.path.basename(e.file.name)
     save_path = os.path.join(path, filename)
 
-    with open(save_path, "wb") as f:
-        f.write(e.file._data)
+    # Check if _path exists and copy file from there
+    if hasattr(e.file, '_path') and e.file._path:
+        shutil.copy2(e.file._path, save_path)
+    else:
+        with open(save_path, "wb") as f:
+            f.write(e.file._data)
 
     file_size = format_size(os.path.getsize(save_path))
     msg = f"File saved: {filename} ({file_size})"

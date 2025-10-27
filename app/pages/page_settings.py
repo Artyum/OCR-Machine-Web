@@ -16,7 +16,7 @@ def page_settings():
         language_input = ui.input("Language (e.g., pol, eng)", value=Config.language).classes("input_field")
         dpi_input = ui.number("Image DPI", value=Config.image_dpi, min=72, max=600).classes("input_field")
         optimize_input = ui.number("Optimization (0-3)", value=Config.optimize, min=0, max=3).classes("input_field")
-        max_workers_input = ui.number("Parallel process limit", value=Config.max_workers, min=0, max=10).classes("input_field")
+        max_workers_input = ui.number("Max parallel processes", value=Config.max_workers, min=0, max=10).classes("input_field")
 
         # Function to save changes
         def save_handler():
